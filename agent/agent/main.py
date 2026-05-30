@@ -325,7 +325,7 @@ class PatrollerAgent:
         def _call_llm(alert: Alert) -> None:
             if self._llm_analyzer and self._llm_analyzer.enabled:
                 asyncio.create_task(
-                    self._llm_analyzer._analyze_alert(alert)
+                    self._llm_analyzer._analyze_batch([alert])
                 )
 
         try:
