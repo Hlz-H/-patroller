@@ -1,0 +1,67 @@
+# ── Python ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.pytest_cache/
+*.egg
+*.spec
+
+# ── PyInstaller ─────────────────────────────────────────
+agent/build/
+agent/dist/patroller-agent.exe
+agent/patroller-agent.spec
+
+# ── Node ────────────────────────────────────────────────
+node_modules/
+.pnp/
+.pnp.js
+
+# ── Backend ─────────────────────────────────────────────
+backend/dist/node.exe
+backend/dist/patroller-backend.exe
+backend/dist/sea-prep.blob
+backend/data/
+
+# ── Commander ───────────────────────────────────────────
+commander/dist/
+commander/dist-electron/
+commander/release/
+
+# ── Mobile ──────────────────────────────────────────────
+mobile/.expo/
+mobile/dist/
+mobile/node_modules/
+
+# ── Build output ────────────────────────────────────────
+dist-installers/
+dist/
+*.wasm
+
+# ── Data & Logs ─────────────────────────────────────────
+*.log
+*.db
+*.db-wal
+*.db-shm
+data/
+logs/
+sandbox_work/
+
+# ── IDE & Editor ───────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Environment ─────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── OS ──────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.lnk

@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "巡查者",
+    "slug": "patroller-mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "patroller",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#0D1117",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.patroller.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0D1117"
+      },
+      "package": "com.patroller.mobile"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-notifications",
+        {}
+      ],
+      "expo-asset"
+    ],
+    "web": {
+      "bundler": "metro",
+      "output": "single"
+    }
+  }
+}

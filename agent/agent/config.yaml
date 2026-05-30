@@ -1,0 +1,165 @@
+# 巡查者 (Patroller) - Default Configuration
+# This file is bundled with the agent. User overrides go to %APPDATA%/巡查者/config.yaml
+
+# --- Monitor Settings ---
+monitors:
+  system_resource:
+    enabled: true
+    interval_seconds: 5
+  process:
+    enabled: true
+    interval_seconds: 3
+  usb:
+    enabled: true
+    interval_seconds: 5
+  registry:
+    enabled: true
+    interval_seconds: 30
+  service:
+    enabled: true
+    interval_seconds: 15
+  directory_integrity:
+    enabled: true
+    interval_seconds: 60
+
+# --- USB Device Control ---
+usb:
+  # Blocked USB devices by Vendor ID / Product ID (VID:PID)
+  blocklist: []
+  # Example blocklist entries:
+  #   - "0781:5591"   # SanDisk Ultra USB 3.0
+  #   - "0951:1666"   # Kingston DataTraveler
+  # Add VID:PID pairs above to block specific devices.
+
+# --- Process Control ---
+process:
+  # Processes *always* allowed (whitelist overrides blacklist).
+  whitelist: []
+  # Processes to kill on sight.
+  blacklist: []
+  # Example blacklist entries:
+  #   - "keylogger.exe"
+  #   - "suspicious_tool.exe"
+
+# --- API Server ---
+api:
+  host: "127.0.0.1"
+  port: 8099
+  cors_origins:
+    - "http://localhost:8099"
+    - "http://127.0.0.1:8099"
+
+# --- Logging ---
+logging:
+  level: "INFO"        # DEBUG, INFO, WARNING, ERROR
+  file: "agent.log"    # relative to working directory
+  max_bytes: 10485760  # 10 MB
+  backup_count: 3
+
+# --- Registry Monitoring (Phase 7) ---
+registry:
+  # Registry key paths to watch for changes. Each entry is a root + subkey
+  # delimited by \\, e.g. "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+  # Supported hives: HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER, HKEY_USERS, HKEY_CLASSES_ROOT
+  monitored_keys:
+    - "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+    - "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+    - "HKEY_LOCAL_MACHINE\\Software\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Run"
+    - "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+    - "HKEY_LOCAL_MACHINE\\Software\\Microsoft\\Windows\\CurrentVersion\\ShellServiceObjectDelayLoad"
+    - "HKEY_LOCAL_MACHINE\\System\\CurrentControlSet\\Services"
+
+# --- Service Monitoring (Phase 7) ---
+service:
+  # If empty, all services are monitored.
+  monitored_names: []
+  alert_on_state_change: true
+  alert_on_new_service: true
+
+# --- Directory Integrity Monitoring (Phase 7) ---
+directory_integrity:
+  monitored_paths:
+    - "C:\\Windows\\System32\\drivers\\etc"
+    - "C:\\Program Files"
+  watch_recursive: true
+  check_hash: false
+
+# --- Backend Connection ---
+backend:
+  enabled: true
+  host: "127.0.0.1"
+  port: 3099
+  device_id: ""
+  device_name: ""
+  reconnect_max_retries: -1
+
+# --- AI Detection (Phase 4) ---
+ai:
+  enabled: true  # 总开关
+
+  yara:
+    enabled: true
+    rules_dir: "rules/"
+    scan_new_processes: true
+    scan_process_memory: false
+    scan_interval_seconds: 30
+
+  ml_anomaly:
+    enabled: true
+    model_path: "models/anomaly_detector.joblib"
+    contamination: 0.01
+    training_hours: 24
+    retrain_interval_hours: 4
+
+  llm:
+    enabled: true
+    endpoint: "http://localhost:11434"
+    model: "qwen2.5:7b"
+    batch_interval_minutes: 30
+    batch_size: 50
+
+# --- AI Smart Control Engine ---
+smart_control:
+  enabled: true
+  evaluation_interval: 60  # seconds between state evaluations
+  tuner:
+    enabled: true
+    idle_multiplier: 2.0     # scale monitor intervals when healthy
+    stress_multiplier: 0.25  # scale intervals down when critical
+  responder:
+    enabled: true
+    auto_respond_critical: true
+    auto_respond_warning: false
+    llm_threshold: 3  # call LLM after N same-type warnings
+  baseline:
+    enabled: true
+    learning_period: 7200  # seconds of quiet before learning
+    storage_path: data/baseline.json
+
+# --- Sandbox (Phase 6) ---
+sandbox:
+  enabled: true
+  # Maximum time (seconds) a file is allowed to run in the sandbox.
+  timeout_seconds: 120
+  # Temp directory for sandbox config and output files.
+  work_dir: "sandbox_work"
+  # Sandbox VM configuration.
+  vm:
+    networking: false
+    audio: false
+    gpu: false
+    clipboard: false
+    printer: false
+  # AI analysis of behavior reports.
+  ai_analysis:
+    enabled: true
+    model: "qwen2.5:7b"
+    prompt_template: |
+      You are a malware analyst. A file was executed in a Windows Sandbox.
+      Below is the behavior report:
+
+      {report}
+
+      Classify the behavior as: SAFE / SUSPICIOUS / MALICIOUS.
+      Provide a confidence score (0-100) and a brief reasoning.
+      Return JSON: {{"classification": "...", "confidence": ..., "reasoning": "..."}}

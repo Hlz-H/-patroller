@@ -1,0 +1,28 @@
+# 巡查者 (Patroller) - Windows PC Security Monitoring Agent
+# Phase 1: Agent Core MVP
+
+# --- Core ---
+psutil>=5.9.8
+pydantic>=2.5.0
+pyyaml>=6.0.1
+
+# --- Windows Integration ---
+pywin32>=306
+
+# --- API Server ---
+fastapi>=0.108.0
+uvicorn[standard]>=0.25.0
+websockets>=12.0
+
+# --- System Tray ---
+pystray>=0.19.5
+Pillow>=10.0.0
+
+# --- Future (included for forward compatibility) ---
+watchdog>=3.0.0
+
+# AI Detection (Phase 4)
+yara-python>=4.5.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
+httpx>=0.27.0
