@@ -6,6 +6,8 @@ __pycache__/
 .pytest_cache/
 *.egg
 *.spec
+agent/python.pid
+agent/.build_cache/
 
 # ── PyInstaller ─────────────────────────────────────────
 agent/build/
